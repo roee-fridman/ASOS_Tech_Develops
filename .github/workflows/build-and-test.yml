@@ -1,0 +1,44 @@
+name: Node.js Build and Test
+
+on:
+  push:
+  pull_request:  # Runs on any pull request
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest  # Runs the workflow on Ubuntu virtual machines
+
+    env:  # Define environment variables
+      APPLITOOLS_SERVER_URL: 'https://asoseyes.applitools.com'
+      APPLITOOLS_API_KEY: ${{ secrets.APPLITOOLS_API_KEY }}  # Access secrets from GitHub Secrets
+      APPLITOOLS_SHOW_LOGS: 'true'
+      APPLITOOLS_BATCH_ID: ${{ github.event.pull_request.head.sha || github.sha }}
+
+
+    steps:
+      - uses: actions/checkout@v3  # Checkout code from the repository
+
+      - name: Install Node.js  # Install Node.js using actions/setup-node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20  # Updated to Node.js 20
+
+      - name: Prepare for push event may be use BranchName=${GITHUB_REPOSITORY}/${GITHUB_REF_NAME}
+        run: curl -v -L -d '' -X POST "https://asoseyes.applitools.com/api/externals/github/push?apiKey=${APPLITOOLS_API_KEY}&CommitSha=${GITHUB_SHA}&BranchName=${GITHUB_REPOSITORY}/${GITHUB_REF_NAME}"
+  
+
+      - name: Install Playwright  # Install Playwright using npm
+        run: npm install playwright
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run tests  # Run tests using npm test
+        run: npm test
+
+      - name: Upload test artifacts (Optional)  # Add a step to upload test artifacts if needed
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results  # Artifact name
+          path: ./test-results  # Path to test results (replace with your actual path)
+
