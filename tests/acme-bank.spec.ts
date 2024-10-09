@@ -17,8 +17,8 @@ test.beforeAll(async() => {
         { name: BrowserType.CHROME, width: 800, height: 600 },
         { name: BrowserType.FIREFOX, width: 1600, height: 1200 },
         { name: BrowserType.SAFARI, width: 1024, height: 768 },
-//      { chromeEmulationInfo: { deviceName: DeviceName.iPhone_11, screenOrientation: ScreenOrientation.PORTRAIT} },
-//       { chromeEmulationInfo: { deviceName: DeviceName.Nexus_10, screenOrientation: ScreenOrientation.LANDSCAPE} }
+      { chromeEmulationInfo: { deviceName: DeviceName.iPhone_11, screenOrientation: ScreenOrientation.PORTRAIT} },
+      { chromeEmulationInfo: { deviceName: DeviceName.Nexus_10, screenOrientation: ScreenOrientation.LANDSCAPE} }
     
        )
 });
@@ -44,7 +44,7 @@ test.describe('ACME Bank', () => {
         await page.locator('id=password').fill('password');
         await page.locator('id=log-in').click();
 
-        await page.evaluate(() => document.querySelector('body > div > div.layout-w > div.content-w > div > div > div:nth-child(2)')!.style.display = 'none');
+        //await page.evaluate(() => document.querySelector('body > div > div.layout-w > div.content-w > div > div > div:nth-child(2)')!.style.display = 'none');
         //await page.evaluate(() => document.querySelector('body > div > div.layout-w > div.content-w > div > div > div.element-wrapper.compact.pt-4 > div.element-box-tp > div > div > div > div:nth-child(2) > div.balance-value')!.textContent = '$12,345');
 
         // Full Page - Visual AI Assertion
